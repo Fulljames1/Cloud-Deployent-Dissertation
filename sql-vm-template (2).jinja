@@ -1,6 +1,9 @@
-#deployment of sql server 2
+#https://cloud.google.com/deployment-manager/docs/configuration/templates/create-basic-template
+#https://cloud.google.com/deployment-manager/docs/step-by-step-guide/create-a-template
+
+#deployment of sql server 1
 resources:
-- name: sql-server-88
+- name: sql-server-1
   type: compute.v1.instance
   properties:
     zone: europe-west2-c
@@ -22,3 +25,4 @@ resources:
     - email: $(ref.{{ properties['serviceAccountId'] }}.email)
       scopes:
       - "https://www.googleapis.com/auth/cloud-platform"
+

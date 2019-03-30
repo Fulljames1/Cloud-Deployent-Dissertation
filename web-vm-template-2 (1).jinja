@@ -1,10 +1,14 @@
-#deployment of sql server 2
+#https://cloud.google.com/deployment-manager/docs/configuration/templates/create-basic-template
+#https://cloud.google.com/deployment-manager/docs/step-by-step-guide/create-a-template
+#https://cloud.google.com/compute/docs/machine-types
+
+#Deployment of web-vm-2
 resources:
-- name: sql-server-88
+- name: web-server-2
   type: compute.v1.instance
   properties:
     zone: europe-west2-c
-    machineType: https://www.googleapis.com/compute/v1/projects/cmp3747m-fulljames-16630227/zones/europe-west2-c/machineTypes/n1-standard-4 #machine type for our needs
+    machineType: https://www.googleapis.com/compute/v1/projects/cmp3747m-fulljames-16630227/zones/europe-west2-c/machineTypes/n1-standard-4 #Machine suited to business size and demand
     disks:
     - deviceName: boot
       type: PERSISTENT
@@ -14,7 +18,7 @@ resources:
         sourceImage: projects/bitnami-launchpad/global/images/bitnami-lampstack-7-1-26-0-linux-debian-9-x86-64 #Deploying Bitnami LAMP stack
     networkInterfaces:
     - network: $(ref.mobileapp-network.selfLink)
-      subnetwork: $(ref.vm-subnet-public.selfLink) #Assign to subnet public
+      subnetwork: $(ref.vm-subnet-public.selfLink)
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT

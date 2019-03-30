@@ -2,7 +2,7 @@
 
 resources:
 #app storage
-- name: content-storage-instance-62 #First instance contains a database for site storage
+- name: content-storage-instance-60 #First instance contains a database for site storage
   type: sqladmin.v1beta4.instance
   properties:
     region: europe-west2 #Deplo in London
@@ -12,15 +12,15 @@ resources:
         binaryLogEnabled: true #Keep log
         enabled: true
      
-- name: sql-site-storage-62
+- name: sql-site-storage-60
   type: sqladmin.v1beta4.database #Create database
   properties:
-    name: sql-site-storage-62
-    instance: $(ref.content-storage-instance-62.name)
+    name: sql-site-storage-60
+    instance: $(ref.content-storage-instance-60.name)
     charset: utf8
 
 #Storage for web user data
-- name: customer-instance-62
+- name: customer-instance-60
   type: sqladmin.v1beta4.instance
   properties:
     region: europe-west2 #Deployed in London keeping to GDPA
@@ -30,15 +30,15 @@ resources:
         binaryLogEnabled: true
         enabled: true
         
-- name: customer-storage-62
+- name: customer-storage-60
   type: sqladmin.v1beta4.database
   properties:
-    name: customer-storage-62
-    instance: $(ref.customer-instance-62.name)
+    name: customer-storage-60
+    instance: $(ref.customer-instance-60.name)
     charset: utf8
 
 #Storage for mobile user data
-- name: mobile-customer-instance-62
+- name: mobile-customer-instance-60
   type: sqladmin.v1beta4.instance
   properties:
     region: europe-west2
@@ -48,9 +48,9 @@ resources:
         binaryLogEnabled: true
         enabled: true
         
-- name: mobile-customer-storage-62
+- name: mobile-customer-storage-60
   type: sqladmin.v1beta4.database
   properties:
-    name: mobile-customer-storage-62
-    instance: $(ref.mobile-customer-instance-62.name)
+    name: mobile-customer-storage-60
+    instance: $(ref.mobile-customer-instance-60.name)
     charset: utf8
