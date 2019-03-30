@@ -1,0 +1,57 @@
+resources:
+- name: debian-template #template for debian vms
+  type: compute.v1.instanceTemplate
+  properties:
+    properties:
+      description: apache
+      tags:
+        items:
+          - webserver
+      zone: europe-west2-a #Deployment in london
+      machineType: n1-standard-8 #Well balanced machiene for webserver
+      canIpForward: false
+      disks:
+      - deviceName: boot
+        type: PERSISTENT #Persistent storage     
+        boot: true
+        autoDelete: true
+        initializeParams:
+          sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-9 #Load debian-9 onto the VM
+      networkInterfaces:
+      - network: $(ref.mobileapp-network.selfLink)
+        subnetwork: $(ref.vm-subnet-public.selfLink) #Deploy in public subnet
+        accessConfigs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+      scheduling:
+          onHostMaintenance: MIGRATE
+          automaticRestart: true
+  
+- name: ins-group #Group instances
+  type: compute.v1.instanceGroup
+  properties:
+    namedPorts:
+    - name: http #Declare port
+      port: 80
+    network: $(ref.mobileapp-network.selfLink) # Assign instances to network
+    zone: europe-west2-a
+    size: 3 #deploy 3
+    subnetwork: $(ref.vm-subnet-public.selfLink) # Assign instances to public facing subnetwork       
+
+   #group manager for debian instances
+- name: debian-manager 
+  type: compute.v1.instanceGroupManager
+  properties:
+    baseInstanceName: debian
+    instanceGroup: $(ref.ins-group.selfLink)
+    instanceTemplate: $(ref.debian-template.selfLink) #refrence the template for a debian vm
+    targetSize: 4 
+    zone: europe-west2-a
+    
+- name: debian-as #autoscaler for debian instances 
+  type: compute.v1.autoscaler
+  properties:
+    zone: europe-west2-a
+    target: $(ref.debian-manager.selfLink)
+    autoscalingPolicy: #Autoscaling for scalability
+      maxNumReplicas: 7
