@@ -1,13 +1,16 @@
 #https://github.com/GoogleCloudPlatform/deploymentmanager-samples/tree/master/google/resource-snippets/dns-v1
 
 imports:
-- path: vm-template.jinja
-- path: vm-template-2.jinja
+- path: compute-engine-template.jinja
+- path: web-vm-template.jinja
+- path: sql-vm-template.jinja
+- path: web-vm-template-2.jinja
+- path: sql-vm-template-2.jinja
 - path: network-template.jinja
 - path: firewall-template.jinja
-- path: compute-engine-template.jinja
-- path: sql-template.jinja
-- path: dataproc.jinja
+
+#- path: sql-template.jinja
+#- path: dataproc.jinja
 - path: debian-vm.jinja
 - path: vpn-router.jinja
 - path: service-account.jinja
@@ -22,10 +25,10 @@ resources:
   type: vpn-router.jinja #Allows for VPN tunnels to the network for external staff
 - name: vm-firewall
   type: firewall-template.jinja #Firewall for security 
-- name: storage-sql
-  type: sql-template.jinja #Deploys SQL instances and databases for storage 
-- name: dataproc
-  type: dataproc.jinja #Deploys dataproc for data analysis on data collected
+#- name: storage-sql
+#  type: sql-template.jinja #Deploys SQL instances and databases for storage 
+#- name: dataproc
+#  type: dataproc.jinja #Deploys dataproc for data analysis on data collected
 - name: mobileshopper-dns
   type: dns.v1.managedZone #Deploys DNS 
   properties:
