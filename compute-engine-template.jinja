@@ -5,5 +5,9 @@ resources:
   type: web-vm-template.jinja #Deploy first VM
   properties:
     serviceAccountId: *SA_NAME #Attach service account to deployment
+- name: vm-2
+  type: sql-vm-template.jinja
+  properties:
+    serviceAccountId: *SA_NAME #Attach service account to deployment
 - name: debian-test
   type: debian-vm.jinja #Deploy debian vms
