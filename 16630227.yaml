@@ -3,7 +3,9 @@
 imports:
 - path: compute-engine-template.jinja
 - path: web-vm-template.jinja
+- path: sql-vm-template.jinja
 - path: web-vm-template-2.jinja
+- path: sql-vm-template-2.jinja
 - path: network-template.jinja
 - path: firewall-template.jinja
 
