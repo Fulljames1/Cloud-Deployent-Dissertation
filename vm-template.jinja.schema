@@ -5,11 +5,8 @@ info:
   version: 1.0
 
 imports:
-- path: vm-template-2.jinja
-- path: vm-template.jinja
-
-
-
+- path: web-vm-template.jinja
+- path: web-vm-template-2.jinja
 
 required: #a zone, network and subnetwork are required feilds in the deployment of a vm
 - zone
@@ -19,7 +16,7 @@ required: #a zone, network and subnetwork are required feilds in the deployment 
 properties:
   zone:
     type: string
-    default: "europe-west2-a" #Force set the zone
+    default: "europe-west2-c" #Force set the zone
     description: zone of the instance
 
   machineType:
