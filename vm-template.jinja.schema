@@ -7,6 +7,8 @@ info:
 imports:
 - path: web-vm-template.jinja
 - path: web-vm-template-2.jinja
+- path: sql-vm-template.jinja
+- path: sql-vm-template-2.jinja
 
 required: #a zone, network and subnetwork are required feilds in the deployment of a vm
 - zone
