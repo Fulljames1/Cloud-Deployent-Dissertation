@@ -1,8 +1,8 @@
 resources:
   - name: web-lb-hc #Create a health check for the backend
-    type: compute.v1.httpHealthCheck
+    type: compute.v1.httpsHealthCheck
     properties:
-      port: 80
+      port: 443
       requestPath: /
       
   - name: web-url-map #Required to map url to backend
@@ -13,9 +13,9 @@ resources:
   - name: backend
     type: compute.v1.backendService #Deployment of backend for VM's 
     properties:
-      port: 80
-      portName: http
-      protocol: HTTP #Defeined HTTP port for communication with backends
+      port: 443
+      portName: https
+      protocol: HTTPS #Defeined HTTP port for communication with backends
       backends:
       - name: backend
         balancingMode: UTILIZATION
@@ -28,10 +28,10 @@ resources:
       - $(ref.web-lb-hc.selfLink)
   
   - name: web-http-proxy
-    type: compute.v1.targetHttpProxy
+    type: compute.v1.targetHttpsProxy
     properties:
       urlMap: $(ref.web-url-map.selfLink)
-      
+      sslCertificates: ["assessment-deployment4-example-ssl"]
   - name: web-ipaddress
     type: compute.v1.globalAddress
     
@@ -41,19 +41,5 @@ resources:
       target: $(ref.web-http-proxy.selfLink)
       IPAddress: $(ref.web-ipaddress.address)
       IPProtocol: TCP #Chosen protocol
-      portRange: 80-80
+      portRange: 443-443
       
-  - name: {{ properties["basename"] }}-lb-fw
-    type: compute.v1.firewall
-    properties:
-      direction: INGRESS
-      network: global/networks/{{ properties["network"] }}
-      sourceRanges:
-      - 130.211.0.0/22
-      - 35.191.0.0/16
-      allowed:
-      - IPProtocol: tcp
-          ports:
-          - '{{ properties["port"] }}'
-      targetTags:
-      - {{ properties["target"] }}

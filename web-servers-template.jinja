@@ -1,0 +1,57 @@
+resources:
+- name: web-template #template for web vms
+  type: compute.v1.instanceTemplate
+  properties:
+    properties:
+      description: apache
+      tags:
+        items:
+          - webserver
+      zone: europe-west2-c #Deployment in london
+      machineType: n1-standard-4 #Machine suited to business size and demand
+      canIpForward: false
+      disks:
+      - deviceName: boot
+        type: PERSISTENT #Persistent storage     
+        boot: true
+        autoDelete: true
+        initializeParams:
+          sourceImage: projects/bitnami-launchpad/global/images/bitnami-lampstack-7-1-26-0-linux-debian-9-x86-64 #Deploying Bitnami LAMP stack
+      networkInterfaces:
+      - network: $(ref.mobileapp-network.selfLink)
+        subnetwork: $(ref.vm-subnet-public.selfLink) #Deploy in public subnet
+        accessConfigs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+      scheduling:
+          onHostMaintenance: MIGRATE
+          automaticRestart: true
+
+- name: web-ins-group #Group instances
+  type: compute.v1.instanceGroup
+  properties:
+    namedPorts:
+    - name: http #Declare port
+      port: 80
+    network: $(ref.mobileapp-network.selfLink) # Assign instances to network
+    zone: europe-west2-c
+    size: 3 #deploy 3
+    subnetwork: $(ref.vm-subnet-public.selfLink) # Assign instances to public facing subnetwork       
+
+   #group manager for debian instances
+- name: web-manager 
+  type: compute.v1.instanceGroupManager
+  properties:
+    baseInstanceName: web
+    instanceGroup: $(ref.web-ins-group.selfLink)
+    instanceTemplate: $(ref.web-template.selfLink) #refrence the template for a debian vm
+    targetSize: 2
+    zone: europe-west2-c
+    
+- name: web-as #autoscaler for debian instances 
+  type: compute.v1.autoscaler
+  properties:
+    zone: europe-west2-c
+    target: $(ref.web-manager.selfLink)
+    autoscalingPolicy: #Autoscaling for scalability
+      maxNumReplicas: 7

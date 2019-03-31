@@ -1,0 +1,36 @@
+#imports:
+#- path: IAM-role.jinja
+
+#resources:
+#- name: role
+#  type: IAM-role.jinja
+#  properties:
+#    description: My role
+#    isOrgnizationRole: false
+#    orgnizationId: ORGNIZATION_ID
+
+#configVersion: v1alpha
+
+#imports:
+#- path: kms.jinja
+
+#resources:
+#- name: kms
+#  type: kms.jinja
+#  properties:
+#    region: europe-west2
+#    user: ananke.iam@gmail.com
+
+imports:
+- path: key.pem
+- path: crt.pem
+- path: csr.pem
+- path: ssl.py
+
+resources:
+- name: example
+  type: ssl.py
+  properties:
+    key: key.pem
+    crt: crt.pem
+    csr: csr.pem

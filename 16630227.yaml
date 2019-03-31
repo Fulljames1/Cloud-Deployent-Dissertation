@@ -1,22 +1,51 @@
 #https://github.com/GoogleCloudPlatform/deploymentmanager-samples/tree/master/google/resource-snippets/dns-v1
+#configVersion: v1alpha
 
 imports:
-- path: compute-engine-template.jinja
-- path: web-vm-template.jinja
-- path: sql-vm-template.jinja
-- path: web-vm-template-2.jinja
-- path: sql-vm-template-2.jinja
+#- path: key.pem
+#- path: crt.pem
+#- path: csr.pem
+#- path: ssl.py
+#- path: IAM-role.jinja
+#- path: kms.jinja
+- path: dns.jinja
+- path: vm-template.jinja
+- path: vm-template-2.jinja
+- path: sql-template-1.jinja
+- path: sql-template-2.jinja
 - path: network-template.jinja
 - path: firewall-template.jinja
-
+- path: compute-engine-template.jinja
 #- path: sql-template.jinja
 #- path: dataproc.jinja
-- path: debian-vm.jinja
+- path: web-servers-template.jinja
+- path: sql-servers-template.jinja
 - path: vpn-router.jinja
 - path: service-account.jinja
-- path: LoadBalancer.jinja
-
+#- path: LoadBalancer.jinja
+- path: cloud-storage.jinja
+- path: bigquery.jinja
+- path: pub-sub.jinja
 resources:
+#- name: example
+#  type: ssl.py
+#  properties:
+#    key: key.pem
+#    crt: crt.pem
+#    csr: csr.pem
+#- name: role
+#  type: IAM-role.jinja
+#  properties:
+#    description: My role
+#    isOrgnizationRole: false
+#    orgnizationId: ORGNIZATION_ID
+#- name: kms
+#  type: kms.jinja
+#  properties:
+#    region: europe-west2
+#    user: ananke.iam@gmail.com
+- name: cloud-storage
+  type: cloud-storage.jinja #Deploys nearline storage
 - name: compute-engine-setup
   type: compute-engine-template.jinja #Calls compute engine temoplate which calls vm1, vm2, service account, and debian vm
 - name: vm-network
@@ -29,15 +58,16 @@ resources:
 #  type: sql-template.jinja #Deploys SQL instances and databases for storage 
 #- name: dataproc
 #  type: dataproc.jinja #Deploys dataproc for data analysis on data collected
-- name: mobileshopper-dns
-  type: dns.v1.managedZone #Deploys DNS 
+- name: dns
+  type: dns.jinja #Deploys DNS 
+#- name: vm-loadbalancer
+#  type: LoadBalancer.jinja #Load balancer to manage traffic
+- name: big-query
+  type: bigquery.jinja
+- name: pubsub
+  type: pub-sub.jinja
   properties:
-    description: A managed dns zone, for the mobile shooing deployment
-    dnsName: mobile-shopper.com.
-- name: vm-loadbalancer
-  type: LoadBalancer.jinja #Load balancer to manage traffic
-
-
+    ackDeadlineSeconds: 4
 
 
 

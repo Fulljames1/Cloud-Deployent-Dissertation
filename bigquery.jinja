@@ -1,0 +1,18 @@
+{% set DATASET = ("ibeacon-analysis" + "-dataset")|replace("-","_") %}
+{% set TABLE = ("ibeacon-analysis" + "-table")|replace("-","_") %}
+
+resources:
+- name: {{ DATASET }}
+# type: bigquery.v2.dataset
+  type: gcp-types/bigquery-v2:datasets
+  properties:
+    datasetReference:
+      datasetId: {{ DATASET }}
+    location: EU
+- name: {{ TABLE }}
+# type: bigquery.v2.table
+  type: gcp-types/bigquery-v2:tables
+  properties:
+    datasetId: $(ref.{{ DATASET }}.datasetReference.datasetId)
+    tableReference:
+      tableId: {{ TABLE }}
