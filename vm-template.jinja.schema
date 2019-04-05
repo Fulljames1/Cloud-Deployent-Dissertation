@@ -1,0 +1,60 @@
+info:
+  title: VM Template Schema
+  author: Lewis Fulljames
+  description: Creates a new VM attached to subnet
+  version: 1.0
+
+imports:
+- path: vm-template-2.jinja
+- path: vm-template.jinja
+
+
+
+
+required: #a zone, network and subnetwork are required feilds in the deployment of a vm
+- zone
+- network
+- subnetwork
+
+properties:
+  zone:
+    type: string
+    default: "europe-west2-a" #Force set the zone
+    description: zone of the instance
+
+  machineType:
+    type: string
+    description: Type of instance to deploy
+    
+  disks:
+    type: object
+    description: Array of disks
+      deviceName
+        type string
+        default "boot"
+        description disk name
+      type
+        type enum
+        description Type fo disk
+      boot
+        type boolean
+        default "true"
+        description describes that it is a boot disk
+      autoDelete
+        type boolean
+        default "true"
+        description will be auto-deleted when the instance is deleted
+      initializeParams
+        type object
+        description "parameters of new disk"
+
+  network:
+    type: string
+    default: $(ref.mobileapp-network.selfLink)
+    description: assigns to the network
+    
+  subnetwork: 
+    type: string
+    default: $(ref.vm-subnet-public.selfLink)
+    description: assigns to the subnetwork
+        
