@@ -1,59 +1,45 @@
 resources:
-  - name: web-lb-hc #Create a health check for the backend
-    type: compute.v1.httpHealthCheck
-    properties:
-      port: 80
-      requestPath: /
-      
-  - name: web-url-map #Required to map url to backend
-    type: compute.v1.urlMap
-    properties:
-      defaultService: $(ref.backend.selfLink)
-      
-  - name: backend
-    type: compute.v1.backendService #Deployment of backend for VM's 
-    properties:
-      port: 80
-      portName: http
-      protocol: HTTP #Defeined HTTP port for communication with backends
-      backends:
-      - name: backend
-        balancingMode: UTILIZATION
-        capacityScaler: 1.0
-        group: $(ref.web-ins-group.selfLink)
-      maxUtilization: 0.8
-      connectionDraining:
-        drainingTimeoutSec: 300
-      healthChecks: 
-      - $(ref.web-lb-hc.selfLink)
-  
-  - name: web-http-proxy
-    type: compute.v1.targetHttpProxy
-    properties:
-      urlMap: $(ref.web-url-map.selfLink)
-      
-  - name: web-ipaddress
-    type: compute.v1.globalAddress
+- name: web-lb-hc #Create a health check for the backend
+  type: compute.v1.httpHealthCheck
+  properties:
+    port: 80
+    requestPath: /
     
-  - name: web-http-forwardingrule #Creation of forwarding rule 
-    type: compute.v1.globalForwardingRule
-    properties:
-      target: $(ref.web-http-proxy.selfLink)
-      IPAddress: $(ref.web-ipaddress.address)
-      IPProtocol: TCP #Chosen protocol
-      portRange: 80-80
-      
-  - name: {{ properties["basename"] }}-lb-fw
-    type: compute.v1.firewall
-    properties:
-      direction: INGRESS
-      network: global/networks/{{ properties["network"] }}
-      sourceRanges:
-      - 130.211.0.0/22
-      - 35.191.0.0/16
-      allowed:
-      - IPProtocol: tcp
-          ports:
-          - '{{ properties["port"] }}'
-      targetTags:
-      - {{ properties["target"] }}
+- name: web-url-map #Required to map url to backend
+  type: compute.v1.urlMap
+  properties:
+    defaultService: $(ref.backend.selfLink)
+    
+- name: backend
+  type: compute.v1.backendService #Deployment of backend for VM's 
+  properties:
+    port: 80
+    portName: http
+    protocol: HTTP #Defeined HTTP port for communication with backends
+    backends:
+    - name: backend
+      balancingMode: UTILIZATION
+      capacityScaler: 1.0
+      group: $(ref.web-ins-group.selfLink)
+    maxUtilization: 0.8
+    connectionDraining:
+      drainingTimeoutSec: 300
+    healthChecks: 
+    - $(ref.web-lb-hc.selfLink)
+
+- name: web-http-proxy
+  type: compute.v1.targetHttpProxy
+  properties:
+    urlMap: $(ref.web-url-map.selfLink)
+    
+- name: web-ipaddress
+  type: compute.v1.globalAddress
+  
+- name: web-http-forwardingrule #Creation of forwarding rule 
+  type: compute.v1.globalForwardingRule
+  properties:
+    target: $(ref.web-http-proxy.selfLink)
+    IPAddress: $(ref.web-ipaddress.address)
+    IPProtocol: TCP #Chosen protocol
+    portRange: 80-80
+    

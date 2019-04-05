@@ -1,14 +1,18 @@
+#https://cloud.google.com/compute/docs/instance-templates/create-instance-templates
+#https://stackoverflow.com/questions/53787807/create-instance-template-based-on-an-exported-image
+#https://stackoverflow.com/questions/36701516/google-cloud-create-image-from-instance
+
 resources:
 - name: web-template #template for web vms
   type: compute.v1.instanceTemplate
   properties:
     properties:
-      description: apache
+      description: Bitnami VM's
       tags:
         items:
           - webserver
       zone: europe-west2-c #Deployment in london
-      machineType: n1-standard-4 #Machine suited to business size and demand
+      machineType: n1-standard-8 #n1-standard-1 #Machine suited to business size and demand
       canIpForward: false
       disks:
       - deviceName: boot
@@ -16,7 +20,8 @@ resources:
         boot: true
         autoDelete: true
         initializeParams:
-          sourceImage: projects/bitnami-launchpad/global/images/bitnami-lampstack-7-1-26-0-linux-debian-9-x86-64 #Deploying Bitnami LAMP stack
+          #https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#bundle_image
+          sourceImage: projects/cmp3747m-fulljames-16630227/global/images/test-image #Deploys the master bitnami VM
       networkInterfaces:
       - network: $(ref.mobileapp-network.selfLink)
         subnetwork: $(ref.vm-subnet-public.selfLink) #Deploy in public subnet
@@ -38,7 +43,7 @@ resources:
     size: 3 #deploy 3
     subnetwork: $(ref.vm-subnet-public.selfLink) # Assign instances to public facing subnetwork       
 
-   #group manager for debian instances
+  #group manager for debian instances
 - name: web-manager 
   type: compute.v1.instanceGroupManager
   properties:
@@ -54,4 +59,4 @@ resources:
     zone: europe-west2-c
     target: $(ref.web-manager.selfLink)
     autoscalingPolicy: #Autoscaling for scalability
-      maxNumReplicas: 7
+      maxNumReplicas: 4

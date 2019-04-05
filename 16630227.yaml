@@ -1,6 +1,4 @@
 #https://github.com/GoogleCloudPlatform/deploymentmanager-samples/tree/master/google/resource-snippets/dns-v1
-#configVersion: v1alpha
-
 imports:
 #- path: key.pem
 #- path: crt.pem
@@ -9,23 +7,17 @@ imports:
 #- path: IAM-role.jinja
 #- path: kms.jinja
 - path: dns.jinja
-- path: vm-template.jinja
-- path: vm-template-2.jinja
-- path: sql-template-1.jinja
-- path: sql-template-2.jinja
 - path: network-template.jinja
 - path: firewall-template.jinja
-- path: compute-engine-template.jinja
-#- path: sql-template.jinja
-#- path: dataproc.jinja
+- path: dataproc.jinja
 - path: web-servers-template.jinja
-- path: sql-servers-template.jinja
 - path: vpn-router.jinja
 - path: service-account.jinja
-#- path: LoadBalancer.jinja
+- path: LoadBalancer.jinja
 - path: cloud-storage.jinja
 - path: bigquery.jinja
 - path: pub-sub.jinja
+
 resources:
 #- name: example
 #  type: ssl.py
@@ -46,22 +38,24 @@ resources:
 #    user: ananke.iam@gmail.com
 - name: cloud-storage
   type: cloud-storage.jinja #Deploys nearline storage
-- name: compute-engine-setup
-  type: compute-engine-template.jinja #Calls compute engine temoplate which calls vm1, vm2, service account, and debian vm
+- name: &SA_NAME my-vm-access
+  type: service-account.jinja #Call service accounts 
+- name: web-servers
+  type: web-servers-template.jinja #Deploy debian vms
+  properties:
+    serviceAccountId: *SA_NAME #Attach service account to deployment
 - name: vm-network
   type: network-template.jinja #vm-network deploys network, and subnets (public and private)
 - name: my-cloud-router
   type: vpn-router.jinja #Allows for VPN tunnels to the network for external staff
 - name: vm-firewall
   type: firewall-template.jinja #Firewall for security 
-#- name: storage-sql
-#  type: sql-template.jinja #Deploys SQL instances and databases for storage 
-#- name: dataproc
-#  type: dataproc.jinja #Deploys dataproc for data analysis on data collected
+- name: dataproc
+  type: dataproc.jinja #Deploys dataproc for data analysis on data collected
 - name: dns
   type: dns.jinja #Deploys DNS 
-#- name: vm-loadbalancer
-#  type: LoadBalancer.jinja #Load balancer to manage traffic
+- name: vm-loadbalancer
+  type: LoadBalancer.jinja #Load balancer to manage traffic
 - name: big-query
   type: bigquery.jinja
 - name: pubsub
