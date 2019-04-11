@@ -1,0 +1,35 @@
+resources:
+- name: gen-firewall-rule #Deployment of a firwall for whole network 
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.beaconinc-network.selfLink)
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["80"]
+    - IPProtocol: TCP #To allow SSH
+      ports: ["22"]
+      
+- name: public-firewall-rule #Deployment of a firwall
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.beaconinc-network.selfLink)
+    subnetwork: $(ref.vm-subnet-public.selfLink) #Assign to subnet public
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["80"]
+    - IPProtocol: TCP #To allow SSH
+      ports: ["22"]
+      
+- name: private-firewall-rule #Deployment of a firwall
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.beaconinc-network.selfLink)
+    subnetwork: $(ref.vm-subnet-private.selfLink) #Assign to subnet private
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: TCP
+      ports: ["80"]
+    - IPProtocol: TCP #To allow SSH
+      ports: ["22"]
