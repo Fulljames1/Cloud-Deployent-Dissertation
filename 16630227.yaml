@@ -19,7 +19,7 @@ imports:
 - path: pub-sub.jinja
 
 resources:
-#- name: example
+#- name: sslcert
 #  type: ssl.py
 #  properties:
 #    key: key.pem
@@ -35,7 +35,7 @@ resources:
 #  type: kms.jinja
 #  properties:
 #    region: europe-west2
-#    user: ananke.iam@gmail.com
+#    user: fullyjnr@gmail.com
 - name: cloud-storage
   type: cloud-storage.jinja #Deploys nearline storage
 - name: &SA_NAME my-vm-access
@@ -61,7 +61,7 @@ resources:
 - name: pubsub
   type: pub-sub.jinja
   properties:
-    ackDeadlineSeconds: 4
+    ackDeadlineSeconds: 4 #acknowledgement seconds
 
 
 

@@ -23,7 +23,7 @@ resources:
           #https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#bundle_image
           sourceImage: projects/cmp3747m-fulljames-16630227/global/images/test-image #Deploys the master bitnami VM
       networkInterfaces:
-      - network: $(ref.mobileapp-network.selfLink)
+      - network: $(ref.beaconinc-network.selfLink)
         subnetwork: $(ref.vm-subnet-public.selfLink) #Deploy in public subnet
         accessConfigs:
           - name: External NAT
@@ -38,7 +38,7 @@ resources:
     namedPorts:
     - name: http #Declare port
       port: 80
-    network: $(ref.mobileapp-network.selfLink) # Assign instances to network
+    network: $(ref.beaconinc-network.selfLink) # Assign instances to network
     zone: europe-west2-c
     size: 3 #deploy 3
     subnetwork: $(ref.vm-subnet-public.selfLink) # Assign instances to public facing subnetwork       
