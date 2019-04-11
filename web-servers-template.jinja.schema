@@ -5,11 +5,8 @@ info:
   version: 1.0
 
 imports:
-- path: vm-template-2.jinja
-- path: vm-template.jinja
-
-
-
+- path: web-servers-template.jinja
+#- path: vm-template.jinja
 
 required: #a zone, network and subnetwork are required feilds in the deployment of a vm
 - zone
@@ -19,7 +16,7 @@ required: #a zone, network and subnetwork are required feilds in the deployment 
 properties:
   zone:
     type: string
-    default: "europe-west2-a" #Force set the zone
+    default: "europe-west2-c" #Force set the zone
     description: zone of the instance
 
   machineType:
@@ -35,7 +32,7 @@ properties:
         description disk name
       type
         type enum
-        description Type fo disk
+        description Type of disk
       boot
         type boolean
         default "true"
@@ -50,7 +47,7 @@ properties:
 
   network:
     type: string
-    default: $(ref.mobileapp-network.selfLink)
+    default: $(ref.beaconinc-network.selfLink)
     description: assigns to the network
     
   subnetwork: 

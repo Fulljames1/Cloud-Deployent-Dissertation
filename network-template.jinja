@@ -1,0 +1,19 @@
+resources:
+- name: beaconinc-network # Create core network 
+  type: compute.v1.network
+  properties:
+    autoCreateSubnetworks: false
+    
+- type: compute.v1.subnetwork #private subnet for data storage
+  name: vm-subnet-private
+  properties:
+    network: $(ref.beaconinc-network.selfLink)
+    ipCidrRange: 10.0.0.0/16
+    region: europe-west2
+    
+- type: compute.v1.subnetwork #public subnet for vm's (Public facing instances)
+  name: vm-subnet-public
+  properties:
+    network: $(ref.beaconinc-network.selfLink)
+    ipCidrRange: 192.168.0.0/16
+    region: europe-west2

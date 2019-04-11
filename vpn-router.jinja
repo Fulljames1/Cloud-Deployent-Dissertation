@@ -6,7 +6,7 @@ resources:
 - name: vpn-target-gateway #Create a VPN gateway
   type: compute.v1.targetVpnGateway
   properties:
-    network: $(ref.mobileapp-network.selfLink) #set to private subnet where database are stored
+    network: $(ref.beaconinc-network.selfLink) #set to private subnet where database are stored
     region: europe-west2
     
 - name: {{ ip_static }} 
@@ -44,7 +44,7 @@ resources:
   type: compute.v1.router
   properties:
     asn: 65001
-    network: $(ref.mobileapp-network.selfLink)
+    network: $(ref.beaconinc-network.selfLink)
     region: europe-west2
     
 - name: vpn-tunnel #vpn tunnel for secrity and access with external connections 
